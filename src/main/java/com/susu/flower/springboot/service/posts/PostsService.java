@@ -2,12 +2,17 @@ package com.susu.flower.springboot.service.posts;
 
 import com.susu.flower.springboot.domain.posts.Posts;
 import com.susu.flower.springboot.domain.posts.PostsRepository;
+import com.susu.flower.springboot.web.dto.PostsListsResponseDto;
 import com.susu.flower.springboot.web.dto.PostsResponseDto;
 import com.susu.flower.springboot.web.dto.PostsSaveRequestDto;
 import com.susu.flower.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -36,4 +41,10 @@ public class PostsService {
         return new PostsResponseDto(entity);
     }
 
+    @Transactional
+    public List<PostsListsResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListsResponseDto::new)
+                .collect(Collectors.toList());
+    }
 }
