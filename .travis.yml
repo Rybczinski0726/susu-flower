@@ -13,8 +13,24 @@ cache:
 
 before_install:
   - chmod +x gradlew
-
+  -
 script: './gradlew clean build'
+
+before_deploy:
+  - zip -r susu-flower *
+  - mkdir -p deploy
+  - mv susu-flower.zip deploy/susu-flower.zip
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: susu-springboot2-build
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: private
+    local_dir: deploy
+    wait-until-deployed: true
 
 notifications:
   email:
